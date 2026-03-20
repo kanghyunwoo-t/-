@@ -5,7 +5,6 @@ import streamlit.components.v1 as components
 from PIL import Image
 from vision_extractor import DocumentVisionExtractor
 from html_to_word import HtmlToDocxConverter
-from main import GOOGLE_API_KEY  # main.py에 입력해 둔 키를 그대로 가져옵니다.
 
 # 페이지 기본 설정
 st.set_page_config(page_title="문서 변환기", layout="centered")
@@ -41,9 +40,12 @@ uploaded_files = st.file_uploader("이미지 파일 업로드", type=['png', 'jp
 # 업데이트 기능 안내 (사용자 혼란 방지용)
 st.info("💡 **안내:** 이미지를 올리고 **[🚀 변환 시작하기]**를 누르시면, 작업 완료 후 하단에 **'미리보기'**와 **'API 요금 계산기'**가 나타납니다!")
 
+# 사용자로부터 API 키 직접 입력받기 (보안 강화)
+user_api_key = st.text_input("🔑 본인의 Gemini API Key를 입력하세요", type="password", help="Google AI Studio에서 발급받은 API 키를 입력하세요. 입력하신 키는 서버에 저장되지 않고 변환 즉시 폐기됩니다.")
+
 if st.button("🚀 변환 시작하기"):
-    if GOOGLE_API_KEY == "여기에_발급받은_GEMINI_API_키를_입력하세요" or not GOOGLE_API_KEY:
-        st.warning("main.py 파일에 API 키가 제대로 입력되어 있는지 확인해 주세요!")
+    if not user_api_key:
+        st.warning("API 키를 입력해 주세요!")
     elif not uploaded_files:
         st.warning("변환할 이미지 파일을 업로드해 주세요!")
     else:
@@ -63,7 +65,7 @@ if st.button("🚀 변환 시작하기"):
             
             try:
                 # 1단계: HTML 추출
-                extractor = DocumentVisionExtractor(api_key=GOOGLE_API_KEY)
+                extractor = DocumentVisionExtractor(api_key=user_api_key)
                 st.info(f"🤖 **자동 적용된 AI 모델:** `{extractor.model_name}`")
                 
                 # 답답함을 해소하기 위한 실시간 진행 바(Progress Bar) 추가
