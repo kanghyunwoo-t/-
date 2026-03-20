@@ -3,7 +3,7 @@ from vision_extractor import DocumentVisionExtractor
 from html_to_word import HtmlToDocxConverter
 
 # 설정값
-GOOGLE_API_KEY = "AIzaSyA2AeVcRU7IqSrjHU3y6GTr8IXq7h2mjFg"
+GOOGLE_API_KEY = "" # 보안을 위해 비워둡니다. 배포 시 안전!
 IMAGE_FILES = [
     "sample_page_1.jpg", 
     "sample_page_2.jpg"
@@ -11,7 +11,7 @@ IMAGE_FILES = [
 OUTPUT_DOCX_FILE = "converted_document.docx"
 
 def main():
-    if GOOGLE_API_KEY == "여기에_발급받은_GEMINI_API_키를_입력하세요" or not GOOGLE_API_KEY:
+    if not GOOGLE_API_KEY:
         print("경고: Google API 키를 입력해 주세요!")
         return
 
